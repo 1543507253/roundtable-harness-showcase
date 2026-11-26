@@ -3,7 +3,8 @@
 > 不是又一个聊天机器人。它把 **多 AI 辩论 → 一页决策卡 → 独立验收 → 工单闭环** 串成一条可审计的链路，
 > 让一次项目评审从「开几天会」压缩成 **几分钟出一页能签字的结论**。
 
-**点开看效果：[`index.html`](index.html)**（单文件，无外链，直接浏览器打开即可）
+**在线看：[1543507253.github.io/roundtable-showcase](https://1543507253.github.io/roundtable-showcase/)**
+**本地看：[`index.html`](index.html)**（单文件，无外链，直接浏览器打开即可）
 
 ---
 
