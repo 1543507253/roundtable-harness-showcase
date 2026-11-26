@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>圆桌会议室 · 决策评审引擎</title>
+<style>
+  :root{
+    --bg:#070b12;
+    --panel:rgba(17,26,40,.72);
+    --line:rgba(148,163,184,.16);
+    --cyan:#22d3ee;
+    --amber:#f59e0b;
+    --red:#ef4444;
+    --txt:#e6edf6;
+    --sub:#8fa3bb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--txt);
+    font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(1100px 620px at 12% -12%, rgba(34,211,238,.13), transparent 62%),
+      radial-gradient(900px 500px at 92% 8%, rgba(245,158,11,.08), transparent 60%),
+      var(--bg);
+    padding:44px 32px 56px;
+  }
+  .wrap{max-width:1180px;margin:0 auto}
+
+  /* ── 头部 ── */
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);
+    border:1px solid rgba(34,211,238,.28);background:rgba(34,211,238,.07);
+    padding:7px 12px;border-radius:999px;
+  }
+  .eyebrow i{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  h1{
+    margin:20px 0 0;font-size:clamp(30px,4.4vw,52px);line-height:1.12;
+    letter-spacing:-.02em;font-weight:800;
+    background:linear-gradient(92deg,#fff 12%,#9be9f6 52%,#f6c26b 96%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{margin-top:14px;max-width:760px;color:var(--sub);font-size:15.5px;line-height:1.85}
+  .sub b{color:#cfe3f5;font-weight:600}
+
+  /* ── 量化条 ── */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:30px 0 8px}
+  .stat{
+    border:1px solid var(--line);background:var(--panel);border-radius:14px;
+    padding:15px 16px;backdrop-filter:blur(6px);
+  }
+  .stat .v{font:800 22px/1.15 ui-monospace,SFMono-Regular,Menlo,monospace;color:#fff;letter-spacing:-.02em}
+  .stat .v small{font-size:12px;font-weight:600;color:var(--cyan);margin-left:3px}
+  .stat .k{margin-top:6px;font-size:12px;color:var(--sub);letter-spacing:.02em}
+
+  /* ── 链路条 ── */
+  .rail{display:flex;align-items:center;gap:6px;margin:34px 0 16px;overflow-x:auto;padding-bottom:4px}
+  .rail .dot{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;
+    display:grid;place-items:center;
+    font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--sub);
+    border:1px solid var(--line);background:rgba(255,255,255,.02);
+    cursor:pointer;transition:.22s;
+  }
+  .rail .dot:hover{color:#fff;border-color:rgba(34,211,238,.5)}
+  .rail .dot.on{color:#061018;background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 18px rgba(34,211,238,.45)}
+  .rail .ln{flex:1 1 18px;height:1px;background:linear-gradient(90deg,rgba(34,211,238,.45),rgba(148,163,184,.12));min-width:14px}
+
+  /* ── 流程卡：3×3 九宫格 ── */
+  .flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .card{
+    position:relative;border:1px solid var(--line);border-radius:16px;
+    background:linear-gradient(180deg,rgba(30,41,59,.55),rgba(12,18,30,.78));
+    padding:18px 18px 16px;cursor:pointer;transition:transform .22s,border-color .22s,box-shadow .22s;
+    overflow:hidden;display:flex;flex-direction:column;min-height:158px;
+  }
+  .desc{flex:1}
+  .card::before{
+    content:"";position:absolute;inset:0 auto auto 0;height:2px;width:100%;
+    background:linear-gradient(90deg,var(--cyan),transparent 72%);opacity:.5;transition:.22s;
+  }
+  .card:hover{transform:translateY(-3px);border-color:rgba(34,211,238,.45);
+    box-shadow:0 14px 40px rgba(34,211,238,.12)}
+  .card.on{border-color:var(--cyan);box-shadow:0 0 0 1px rgba(34,211,238,.35),0 18px 46px rgba(34,211,238,.16)}
+  .card.on::before{opacity:1;height:3px}
+  .no{font:700 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;color:var(--cyan);opacity:.9}
+  .name{margin:10px 0 8px;font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+  .desc{font-size:13px;line-height:1.75;color:var(--sub)}
+  .tag{
+    display:inline-block;align-self:flex-start;margin-top:12px;font:600 10.5px/1.5 ui-monospace,Menlo,monospace;
+    color:var(--amber);border:1px solid rgba(245,158,11,.28);background:rgba(245,158,11,.07);
+    padding:4px 8px;border-radius:6px;letter-spacing:.03em;
+  }
+  .card.warn .tag{color:#fca5a5;border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
+
+  /* ── 详情面板 ── */
+  .detail{
+    margin-top:18px;border:1px solid rgba(34,211,238,.22);border-radius:16px;
+    background:linear-gradient(180deg,rgba(34,211,238,.06),rgba(12,18,30,.85));
+    padding:22px 24px;min-height:132px;
+  }
+  .detail .dtop{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+  .detail .dno{font:700 11px/1 ui-monospace,Menlo,monospace;color:var(--cyan);letter-spacing:.12em}
+  .detail .dname{font-size:19px;font-weight:700}
+  .detail .dbody{margin-top:12px;display:grid;gap:10px}
+  .row{display:grid;grid-template-columns:88px 1fr;gap:14px;font-size:13.5px;line-height:1.8}
+  .row .lb{color:var(--sub);font:600 11.5px/1.8 ui-monospace,Menlo,monospace;letter-spacing:.05em}
+  .row .tx{color:#d8e4f2}
+  .row .tx em{color:var(--cyan);font-style:normal}
+  .row .tx code{
+    font:600 12px/1 ui-monospace,Menlo,monospace;color:#9be9f6;
+    background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.2);
+    padding:2px 6px;border-radius:5px;
+  }
+
+  /* ── 两条吵出来的规矩 ── */
+  .lessons{margin-top:38px}
+  .lhead h2{
+    margin:12px 0 8px;font-size:clamp(22px,2.7vw,31px);font-weight:800;
+    letter-spacing:-.015em;color:#fff;
+  }
+  .lhead h2 span{
+    background:linear-gradient(92deg,#9be9f6,#f6c26b);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .lhead p{color:var(--sub);font-size:14px;line-height:1.85;max-width:860px}
+  .lgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  .lcard{
+    border:1px solid var(--line);border-radius:16px;padding:20px 22px 18px;
+    background:linear-gradient(180deg,rgba(30,41,59,.58),rgba(12,18,30,.82));
+    display:flex;flex-direction:column;
+  }
+  .lcard.data{border-color:rgba(34,211,238,.26)}
+  .lcard.rebel{border-color:rgba(239,68,68,.26)}
+  .lcard h3{font-size:16px;font-weight:700;line-height:1.4}
+  .lcard h3 .idx{font:800 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;margin-right:7px;color:var(--cyan)}
+  .lcard.rebel h3 .idx{color:#f87171}
+  .q{
+    margin-top:14px;padding-left:13px;border-left:2px solid rgba(34,211,238,.45);
+    font-size:12.8px;line-height:1.85;color:#cfe3f5;
+  }
+  .lcard.rebel .q{border-left-color:rgba(239,68,68,.45)}
+  .q em{font-style:normal;color:#fff;background:rgba(34,211,238,.12);padding:1px 5px;border-radius:4px}
+  .lcard.rebel .q em{background:rgba(239,68,68,.13)}
+  .q .src{display:block;margin-top:6px;font:600 10.8px/1.4 ui-monospace,Menlo,monospace;color:#7e93ab;letter-spacing:.02em}
+  .lcard .q:last-of-type{margin-bottom:16px}
+  .take{
+    margin-top:auto;padding-top:13px;border-top:1px dashed rgba(148,163,184,.2);
+    font-size:13.4px;line-height:1.8;color:#e6edf6;
+  }
+  .take b{color:var(--cyan)}
+  .lcard.rebel .take b{color:#fca5a5}
+
+  .lcard.gate{border-color:rgba(245,158,11,.26)}
+  .lcard.gate h3 .idx{color:var(--amber)}
+  .lcard.wide{grid-column:1/-1}
+  .lcard.wide .rows{display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:1fr 1fr;gap:14px 26px}
+  .rows{margin-top:14px;display:flex;flex-direction:column;gap:11px}
+  .row{display:grid;grid-template-columns:92px 1fr;gap:12px;align-items:start}
+  .row .k{
+    font:700 10.5px/1.7 ui-monospace,Menlo,monospace;color:#8fa6bf;letter-spacing:.02em;
+  }
+  .row .v{font-size:12.8px;line-height:1.8;color:#dbe6f2}
+  .row .v b{color:#fff}
+  .row .v code{
+    font:600 10.8px/1.5 ui-monospace,Menlo,monospace;color:var(--cyan);
+    background:rgba(34,211,238,.09);padding:1px 5px;border-radius:4px;
+  }
+  .lcard.gate .row .v code{color:#fbbf24;background:rgba(245,158,11,.09)}
+  .lcard.wide .row .v code{color:#f6c26b;background:rgba(245,158,11,.09)}
+
+  /* ── 两种坐法（顶部定位条） ── */
+  .duo{
+    margin-top:20px;display:flex;flex-wrap:wrap;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    background:linear-gradient(90deg,rgba(34,211,238,.055),rgba(245,158,11,.05));
+  }
+  .duo .col{flex:1 1 340px;padding:14px 20px 15px;min-width:0}
+  .duo .col + .col{border-left:1px solid rgba(148,163,184,.16)}
+  .duo .t{font:700 11px/1.6 ui-monospace,Menlo,monospace;letter-spacing:.07em;color:var(--cyan)}
+  .duo .col.b .t{color:var(--amber)}
+  .duo .d{margin-top:7px;font-size:13px;line-height:1.8;color:#cfe0f0}
+  .duo .d b{color:#fff}
+  .duo .d code{
+    font:600 11px/1.5 ui-monospace,Menlo,monospace;color:#f6c26b;
+    background:rgba(245,158,11,.1);padding:1px 4px;border-radius:3px;
+  }
+  .duo .st{
+    display:inline-block;margin-left:9px;padding:3px 7px;border-radius:4px;
+    font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.04em;vertical-align:2px;
+    color:#7ee7a6;background:rgba(34,197,94,.13);
+  }
+  .duo .col.b .st{color:#fbbf24;background:rgba(245,158,11,.13)}
+  .duo .base{
+    flex:1 1 100%;padding:13px 20px 14px;border-top:1px solid rgba(148,163,184,.16);
+    font-size:12.6px;line-height:1.85;color:#c6d6e6;
+  }
+  .duo .base .t{display:block;margin-bottom:5px;color:#8fa6bf}
+  .duo .base b{color:#fff}
+
+  /* ── 底部 ── */
+  .foot{margin-top:34px;display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
+  .honest{border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:var(--panel)}
+  .honest h3{font-size:13px;letter-spacing:.06em;color:var(--sub);font-weight:700;margin-bottom:10px}
+  .honest p{font-size:13px;line-height:1.9;color:#b9c9dc}
+  .honest p span{color:var(--red)}
+  .sign{display:flex;flex-direction:column;justify-content:center;gap:8px}
+  .sign .big{font:800 15px/1.6 "PingFang SC","Microsoft YaHei",sans-serif;color:#fff}
+  .sign .small{font-size:12.5px;color:var(--sub);line-height:1.8}
+
+  @media (max-width:1000px){
+    .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width:760px){
+    body{padding:30px 18px 42px}
+    .flow{grid-template-columns:1fr}
+    .foot{grid-template-columns:1fr}
+    .row{grid-template-columns:1fr;gap:2px}
+    .row .lb{font-size:10.5px;opacity:.8}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <span class="eyebrow"><i></i>ROUNDTABLE · 决策评审引擎</span>
+  <h1>给决策装检查官</h1>
+  <p class="sub">
+    不是又一个聊天机器人。它把 <b>多 AI 辩论 → 一页决策卡 → 独立验收 → 工单验收</b> 串成一条可审计的链路，
+    让一次项目评审从「开几天会」压缩成 <b>几分钟出一页可签字的结论</b>。
+  </p>
+
+  <div class="duo">
+    <div class="col">
+      <div class="t">坐法 A · 一个人的辩论室<span class="st">现在在跑</span></div>
+      <div class="d">入口是<b>智能组建</b>：丢一句想法或一份文档，AI 先审题三步（核心问题 / 视角 / 盲区），再按议题配席位、配维度、配轮数——<b>不是固定 4 个机器人</b>。42 房 145 席都是这么开的。</div>
+    </div>
+    <div class="col b">
+      <div class="t">坐法 B · 真·多人多 Agent<span class="st">待启用</span></div>
+      <div class="d">席位名就是<b>真实岗位</b>：每个岗位的人带自己的 agent 进房，<code>identify</code> 自称身份、<code>join_context</code> 入席，自己 <code>claim_turn</code> 说自己的话。<b>谁会说什么，由那个人自己负责。</b></div>
+    </div>
+    <div class="base">
+      <span class="t">共同底座 · 每个席位开口前，系统先把这五样摆到它面前</span>
+      准则硬规则 · 房间记忆 · <b>技能库目录</b> · 行业上下文 · <b>议题事实基准</b>（带来源 URL 与发布日期）——不是让模型凭记忆瞎猜，是把材料摊开。<b>喂什么，就决定它吐什么。</b>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="v">1,037<small>条</small></div><div class="k">真实 AI 发言</div></div>
+    <div class="stat"><div class="v">367<small>万</small></div><div class="k">累计 tokens</div></div>
+    <div class="stat"><div class="v">42<small>房</small></div><div class="k">评审记录（37 房有真实发言）</div></div>
+    <div class="stat"><div class="v">6,867<small>行</small></div><div class="k">自研核心代码</div></div>
+    <div class="stat"><div class="v">76<small>秒</small></div><div class="k">部署机器时间 · 0 GPU</div></div>
+  </div>
+
+  <div class="rail" id="rail"></div>
+  <section class="flow" id="flow"></section>
+  <section class="detail" id="detail">
+    <div class="dtop"><span class="dno">09 / 09</span><span class="dname">选一步查看它的证据</span></div>
+    <div class="dbody"><div class="row"><div class="lb">提示</div><div class="tx">点上面任意一张卡片，这里会展开<b>这一步具体怎么做、拿什么验证过、代码在哪</b>。</div></div></div>
+  </section>
+
+  <section class="lessons">
+    <div class="lhead">
+      <span class="eyebrow"><i></i>FROM REAL DEBATES</span>
+      <h2>三条不是设计出来的，是<span>吵出来的</span></h2>
+      <p>下面每一句都是从真实房间里原样摘的，不是我事后总结的漂亮话。</p>
+    </div>
+
+    <div class="lgrid">
+      <div class="lcard data">
+        <h3><span class="idx">①</span>先喂真数据，再谈结论</h3>
+
+        <div class="q">
+          「基本面参考成都统计局公报：2025 年 11 月社零单月同比 <em>-2.9%</em>……8 万元投入必须算清回本周期。」
+          <span class="src">rt-chengdu · 运营官 R1</span>
+        </div>
+
+        <div class="q">
+          「"降人力 60%"先给出处：成都统计局公报和公共数据开放平台<em>都没有这个口径</em>，只能算供应商话术。」
+          <span class="src">rt-chengdu · 全局批判官 R1</span>
+        </div>
+
+        <div class="q">
+          「单店模型仍是 <em>8 万÷12 店 = 6,667 元/店/年</em>、556 元/店/月；回收期 = 8 万÷年化可核验现金流入，“省 1 小时”一律不进分子。」
+          <span class="src">rt-chengdu · 投资官 R3</span>
+        </div>
+
+        <div class="q">
+          「公报只有社零与品类增速，<em>没有任何客诉敏感性指标</em>……拿宏观零售数据做微观客诉归因是无源断言，请撤下或标待查证。」
+          <span class="src">rt-chengdu · 全局批判官 R6</span>
+        </div>
+
+        <div class="take">
+          <b>喂进去的东西决定吐出来的东西。</b>灌的是统计公报，它才敢把“降 60%”打成“话术”；
+          灌的是营销稿，它就只会复述营销稿。更狠的是第二条：<b>喂了真数据，也不许乱引申</b>——数据只能支撑它够得着的那一步。
+        </div>
+      </div>
+
+      <div class="lcard rebel">
+        <h3><span class="idx">②</span>它敢反驳你的议题</h3>
+
+        <div class="q">
+          「部分接受，但我要<em>先反驳议题本身</em>：把"做不做"和"唯一优先"捆成一个二选一，讨论就被拖到预算、开关上，没人回答最该先答的一句。」
+          <span class="src">rt-audit · opencode R1</span>
+        </div>
+
+        <div class="q">
+          「这个议题被设成二选一，<em>本身就是战略上的偷懒</em>——真正要定的是实施边界，不是实施与否。」
+          <span class="src">rt-gate · opencode R1</span>
+        </div>
+
+        <div class="q">
+          「这个议题<em>连客户细分都没定</em>。按 Osterwalder 九要素，价值主张必须先绑定客户细分……没定就敢报 3.5 天，等于给一个未定义物估价。」
+          <span class="src">rt-gate · opencode R1</span>
+        </div>
+
+        <div class="q">
+          <em>「必须换」这个前提不成立。</em>……瓶颈不在容量，而在"无写锁并发"和"无事务的半更新崩溃态"——这是代码缺陷，不是介质缺陷，换库治标不治本。
+          <span class="src">rt-store · 工程 R1</span>
+        </div>
+
+        <div class="take">
+          <b>它不是帮你论证，是先问你这题该不该这么问。</b>“必须换”这种前提，它敢直接回“前提不成立，这是代码缺陷不是介质缺陷”——
+          一个只会点头的 AI，是查不出“问法本身在偷懒”的。
+        </div>
+      </div>
+
+      <div class="lcard wide">
+        <h3><span class="idx">③</span>最开放的题，出口也得是“能开工的决定”</h3>
+        <div class="rows">
+          <div class="row"><div class="k">最开放的题</div><div class="v">rt-game2/3 是“罗小黑·众生之门”——纯创意题。21 / 32 条跑完，出口不是一堆点子，是<b>「30 分钟单机垂直切片、3-5 扇门、不做开放世界」</b>，第 5 轮就收敛。</div></div>
+          <div class="row"><div class="k">批判官原话</div><div class="v">「把番剧里'想见另一侧的自己'当玩家动机，是本次讨论<b>最大的未验证前提</b>——那是观众情感，不是游戏动机，没有证据表明它能迁移进操作循环。」</div></div>
+          <div class="row"><div class="k">裁决原话</div><div class="v">「<b>无规格单不拨款</b>；50% 仅作五档预算下限、不参与设卡；效应量以置信区间刷新。」</div></div>
+          <div class="row"><div class="k">为什么收敛</div><div class="v">七段决策卡 + 双闸要求<b>有数字、有来源、有“若…则”</b>——发散创意根本过不了闸。<b>拼的不是点子多少，是每个数字都能查到出处；头脑风暴它不如你，把风暴压成一条能开工的路线，它比你狠。</b></div></div>
+        </div>
+      </div>
+    </div>
+  <section class="lessons">
+    <div class="lhead">
+      <span class="eyebrow"><i></i>WHAT'S UNDER THE HOOD</span>
+      <h2>这三个问题，只有<span>代码能答</span></h2>
+      <p>面试官最会问的三句是：<b>“多 Agent 是真接进来，还是循环调 API？”</b>、<b>“证据约束靠 prompt 还是靠代码？”</b>、<b>“反驳是不是你写死的？”</b>
+        ——下面是我翻自己代码之后的答案，包括对我不利的那部分。</p>
+    </div>
+
+    <div class="lgrid">
+      <div class="lcard data">
+        <h3><span class="idx">①</span>多 Agent 是真接，还是循环调 API？</h3>
+        <div class="rows">
+          <div class="row"><div class="k">真有协议</div><div class="v"><b>@modelcontextprotocol/sdk 1.10.2</b> + SSE / StreamableHTTP 双传输，<b>33 个工具</b>在 <code>createMcpServer()</code> 里真注册——外部 agent 能连上，不是“我用了 MCP”的口号。</div></div>
+          <div class="row"><div class="k">它怎么说话</div><div class="v"><code>join_context</code> 入席 → <code>list_pending_turns</code> 领到自己的题 → 自己读整间房 → <code>claim_turn</code> 提交自己的话。<b>不是被喂 prompt 代答。</b></div></div>
+          <div class="row"><div class="k">现在的答案</div><div class="v"><b>145 席 backend 全是 http，0 个外部 agent 席位</b>——11-25 CLI 免费档全挂，我写死了 <code>backend:"http"</code>。所以它是“多模型扇出”，<b>不是</b>“多 agent 接入”。</div></div>
+          <div class="row"><div class="k">边界</div><div class="v">会议厅是通的，放开席位层是一行配置的事。<b>难的是先承认它此刻没开着</b>，而不是拿协议名当卖点。</div></div>
+        </div>
+      </div>
+
+      <div class="lcard gate">
+        <h3><span class="idx">②</span>证据边界：prompt 定规矩，代码当闸门</h3>
+        <div class="rows">
+          <div class="row"><div class="k">第 1 层</div><div class="v"><b>prompt（软）</b>：准则文件 <code>jury-guidelines v1.5</code> 的测算纪律——宣称数字必去水、隐性成本必"若…则"、人工对标必给。这层模型可以不听。</div></div>
+          <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
+          <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立判</b>：审视验收官按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
+          <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义席只给事实纪律、不给数字。</div></div>
+          <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它能签字的原因。</div></div>
+        </div>
+      </div>
+
+      <div class="lcard wide">
+        <h3><span class="idx">③</span>"敢反驳议题"是长出来的，不是写死的</h3>
+        <div class="rows">
+          <div class="row"><div class="k">查了什么</div><div class="v">全库搜"议题本身""该不该这么问"这类字样，<b>只有 1 处命中</b>，还是组建准则里的"审题三步"——<b>没有任何一条指令让席位反驳议题</b>。辩论 prompt 只写"明确表示认同或反驳、要有实质交锋"，反驳谁、反驳到哪一层，模型自己选。</div></div>
+          <div class="row"><div class="k">所以场场不同</div><div class="v">rt-gate 砍设问结构（"二选一本身就是战略上的偷懒"）；同房另一轮砍客户细分未定（"没定就敢报 3.5 天，等于给未定义物估价"）；rt-store 砍前提（"必须换这个前提不成立，是代码缺陷不是介质缺陷"）。<b>模板写不出四种刀法。</b></div></div>
+          <div class="row"><div class="k">也不场场有</div><div class="v">rt-chengdu、rt-food、rt-ice 三个房间里没出现"反驳议题"——如果是预设，它该场场来一句。</div></div>
+          <div class="row"><div class="k">最硬的自证</div><div class="v">准则文件里留着一条翻车记录：<b>“2026-11-24 游戏场，4 席把'游戏创意'审成'十年期 AI 技术立项'，16 条发言 16/16 落在 ROI/技术栈，游戏本体零评审——不是模型差，是组建没有审题环节”</b>。这条规则是翻车后补的。<b>如果我一开始就写死，就不会有这次翻车。</b></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <div class="honest">
+      <h3>诚实边界（先说自己的短板）</h3>
+      <p>
+        <span>①</span> 不训练、不微调模型，智能全部来自自备 API key；<br>
+        <span>②</span> 单机单进程，适合一个团队评审，不是全公司 SaaS；<br>
+        <span>③</span> 审计是应用级留痕，不是法律级存证；<br>
+        <span>④</span> 当前不做自动联网检索，事实靠半自动注入白名单；<br>
+        <span>⑤</span> 产物体（artifact）不进席位 prompt，外部 agent 得自己 <code>get_artifact</code> 取。
+      </p>
+    </div>
+    <div class="sign">
+      <div class="big">竞品卖「更聪明的讨论」，<br>它卖「能签字的结论」。</div>
+      <div class="small">生成完就结束的 AI 很多；<br>敢打回重做的，很少。</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const STEPS = [
+  {
+    no:"01", name:"提议题", tag:"入口",
+    desc:"一句话，或一份文档。Boss 抛出问题，奇思原样保留，不偷换。",
+    what:"议题进入房间，成为整场评审的唯一锚点。支持一句话、也支持带附件/数据。",
+    proof:"成都连锁餐饮「12 店 AI 巡检值不值得投」——原始议题直接取自真实业务会。",
+    code:"POST /contexts · discussion[0]"
+  },
+  {
+    no:"02", name:"智能组建", tag:"不是随便拉人",
+    desc:"AI 审题三步：核心问题 / 穷举视角 / 自曝盲区，再指派主判官。",
+    what:"系统先自己把题审一遍：这个问题真正要回答什么、需要哪几个视角、我可能漏了什么，然后才定席位与轮数。",
+    proof:"格陵兰冰盖场，组建阶段真实自曝「我漏掉了冰川动力学专家」——盲区是被写出来的，不是被掩盖的。",
+    code:"jury-suggest · buildPromptCtx"
+  },
+  {
+    no:"03", name:"多席位辩论", tag:"立场冲突",
+    desc:"每席位独立人格与立场，互相引用上一轮；能两轮说清就不拖到八轮。",
+    what:"每个席位有自己的角色（运营/财务/风险/技术），发言带引用、带轮次。自动挡按表态收敛，不设死轮数。",
+    proof:"成都餐饮场 10 轮 42 条真实缠斗；确认型议题 2 轮即收口。",
+    code:"runDebate · runSeat（失败重试 3 次 + fallback 模型）"
+  },
+  {
+    no:"04", name:"跑题探针", tag:"质量信号",
+    desc:"每轮打 0–10 相关度。连续两轮 <6 就拉回，拉回仍低就提前收口。",
+    what:"不靠「最多跑几轮」这种硬上限，而是每轮判一次「还在聊正事吗」。偏移就注入提醒拉回（reel），拉不回就停（halt）。",
+    proof:"正常场 R3=9、R4=9，零误伤；漂移场连续低分被拉回并记录轨迹。",
+    code:"DRIFT_CHECK · drift.scored 落库"
+  },
+  {
+    no:"05", name:"收敛计票", tag:"可解释的收口",
+    desc:"接受=1 / 部分接受=0.5 / 拒绝=0，加权 ≥0.6 且连续两轮才判定收敛。",
+    what:"不是「主持人说差不多了」就结束，是按表态算票。收口时强制列出「未消分歧」，不搞多数暴政。",
+    proof:"5 轮收口后仍挂 2–3 条分歧，原样保留——分歧不藏，是给审批人看的。",
+    code:"resolveConsensus · stanceOf · CONVERGE_STREAK=2",
+    warn:true
+  },
+  {
+    no:"06", name:"七段决策卡", tag:"可验收的产物",
+    desc:"结论 / 假设 / 去水 ROI / 隐性成本 / 人工 vs AI 锚点 / 风险等级 / 建议动作。",
+    what:"每段都有硬要求：数字必须带算式、区间、敏感性、来源；厂商宣称要「去水」；隐性成本必须写成「若…则…」。",
+    proof:"成都场：供应商宣称降 60% → 去水后 30–40%，算式一行写死。",
+    code:"businessPrompt（七段）· 测算纪律 v1.6"
+  },
+  {
+    no:"07", name:"审视验收官", tag:"独立挑刺",
+    desc:"独立 AI 动态选角，判「通过 / 不通过」；不通过 → 漏洞清单 → 打回重审，≤2 轮。",
+    what:"辩论结束不等于结论成立。另起一个不参与辩论的 AI，按漏洞跨域自动换角色，专挑致命问题。",
+    proof:"食品厂场揪出「576 次/日 ×30 天 ×12 店，把 12 店重复乘了 12 次」——这是真算数错，不是措辞问题。",
+    code:"auditAuditPrompt · auditVerdictGate · MAX_AUDIT_ROUNDS=2",
+    warn:true
+  },
+  {
+    no:"08", name:"双闸校验", tag:"代码级红线",
+    desc:"硬闸查格式与来源，算数闸真求值：≈ 容差 5%，= 容差 1%。",
+    what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码闸：七段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
+    proof:"4 张决策卡 0 误杀；真错必拦、四舍五入放行。模型算数不可靠，代码兜底。",
+    code:"auditHardGates · checkCardArithmetic",
+    warn:true
+  },
+  {
+    no:"09", name:"工单闭环", tag:"结论变成任务",
+    desc:"共识 → 工单 → 认领 → 回写 → 验收 → 审计。结论不是文档，是带责任人的任务。",
+    what:"审批通过后自动生成工单，挂来源共识与验收标准；执行人认领、逐条回写 verdict + evidence，Boss 验收，全程审计留痕。",
+    proof:"fde-demo 房真机走通五步（C-002 → W-010 → claimed → done → accepted），该房 47 条审计链可回溯。",
+    code:"tasks · claim_task · job_create→claim→complete→accept"
+  }
+];
+
+const rail = document.getElementById('rail');
+const flow = document.getElementById('flow');
+const detail = document.getElementById('detail');
+
+STEPS.forEach((s,i)=>{
+  if(i) { const ln=document.createElement('span'); ln.className='ln'; rail.appendChild(ln); }
+  const d=document.createElement('div');
+  d.className='dot'; d.textContent=s.no; d.dataset.i=i;
+  d.onclick=()=>select(i);
+  rail.appendChild(d);
+});
+
+STEPS.forEach((s,i)=>{
+  const c=document.createElement('div');
+  c.className='card'+(s.warn?' warn':'');
+  c.dataset.i=i;
+  c.innerHTML=`<div class="no">${s.no}</div><div class="name">${s.name}</div>
+    <div class="desc">${s.desc}</div><div class="tag">${s.tag}</div>`;
+  c.onclick=()=>select(i);
+  flow.appendChild(c);
+});
+
+function select(i){
+  const s=STEPS[i];
+  document.querySelectorAll('.card').forEach(el=>el.classList.toggle('on',+el.dataset.i===i));
+  document.querySelectorAll('.dot').forEach(el=>el.classList.toggle('on',+el.dataset.i===i));
+  detail.innerHTML=`
+    <div class="dtop"><span class="dno">${s.no} / 09</span><span class="dname">${s.name}</span>
+      <span class="tag" style="margin:0">${s.tag}</span></div>
+    <div class="dbody">
+      <div class="row"><div class="lb">做什么</div><div class="tx">${s.what}</div></div>
+      <div class="row"><div class="lb">验证证据</div><div class="tx">${s.proof}</div></div>
+      <div class="row"><div class="lb">代码位置</div><div class="tx"><code>${s.code}</code></div></div>
+    </div>`;
+}
+
+select(8);
+</script>
+</body>
+</html>
