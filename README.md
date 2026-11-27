@@ -3,7 +3,7 @@
 > 多个模型按角色分工、按 9 步流程推进，靠规则化判据把讨论收敛成一份结论，全程可审计。
 > 一次项目评审，从「开几天会」压缩成「几分钟出一页能签字的决策卡」。
 
-**在线看：[1543507253.github.io/roundtable-showcase](https://1543507253.github.io/roundtable-showcase/)**
+**在线看：[1543507253.github.io/roundtable-harness-showcase](https://1543507253.github.io/roundtable-harness-showcase/)**
 **本地看：[`index.html`](index.html)**（单文件，无外链，直接浏览器打开即可）
 
 ---
