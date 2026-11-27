@@ -365,7 +365,7 @@
           <div class="row"><div class="k">第 1 层</div><div class="v"><b>prompt（软）</b>：准则文件 <code>jury-guidelines v1.5</code> 的测算纪律——宣称数字必去水、隐性成本必"若…则"、人工对标必给。这层模型可以不听。</div></div>
           <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
           <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立判</b>：独立验收角色按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
-          <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义席只给事实纪律、不给数字。</div></div>
+          <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义角色只给事实纪律、不给数字。</div></div>
           <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它能签字的原因。</div></div>
         </div>
       </div>
@@ -374,9 +374,9 @@
         <h3><span class="idx">③</span>"敢反驳议题"是长出来的，不是写死的</h3>
         <div class="rows">
           <div class="row"><div class="k">查了什么</div><div class="v">全库搜"议题本身""该不该这么问"这类字样，<b>只有 1 处命中</b>，还是组建准则里的"审题三步"——<b>没有任何一条指令让角色槽位反驳议题</b>。讨论 prompt 只写"明确表示认同或反驳、要有实质交锋"，反驳谁、反驳到哪一层，模型自己选。</div></div>
-          <div class="row"><div class="k">所以场场不同</div><div class="v">rt-gate 砍设问结构（"二选一本身就是战略上的偷懒"）；同房另一轮砍客户细分未定（"没定就敢报 3.5 天，等于给未定义物估价"）；rt-store 砍前提（"必须换这个前提不成立，是代码缺陷不是介质缺陷"）。<b>模板写不出四种刀法。</b></div></div>
+          <div class="row"><div class="k">所以场场不同</div><div class="v">rt-gate 砍设问结构（"二选一本身就是战略上的偷懒"）；同一会话另一轮砍客户细分未定（"没定就敢报 3.5 天，等于给未定义物估价"）；rt-store 砍前提（"必须换这个前提不成立，是代码缺陷不是介质缺陷"）。<b>模板写不出四种刀法。</b></div></div>
           <div class="row"><div class="k">也不场场有</div><div class="v">rt-chengdu、rt-food、rt-ice 三个会话实例里没出现"反驳议题"——如果是预设，它该场场来一句。</div></div>
-          <div class="row"><div class="k">最硬的自证</div><div class="v">准则文件里留着一条翻车记录：<b>“2026-11-24 游戏场，4 席把'游戏创意'审成'十年期 AI 技术立项'，16 条发言 16/16 落在 ROI/技术栈，游戏本体零评审——不是模型差，是组建没有审题环节”</b>。这条规则是翻车后补的。<b>如果我一开始就写死，就不会有这次翻车。</b></div></div>
+          <div class="row"><div class="k">最硬的自证</div><div class="v">准则文件里留着一条翻车记录：<b>“2026-11-24 游戏场，4 个角色把'游戏创意'审成'十年期 AI 技术立项'，16 条发言 16/16 落在 ROI/技术栈，游戏本体零评审——不是模型差，是组建没有审题环节”</b>。这条规则是翻车后补的。<b>如果我一开始就写死，就不会有这次翻车。</b></div></div>
         </div>
       </div>
     </div>
@@ -466,7 +466,7 @@ const STEPS = [
     no:"09", name:"工单闭环", tag:"结论变成任务",
     desc:"共识 → 工单 → 认领 → 回写 → 验收 → 审计。结论不是文档，是带责任人的任务。",
     what:"审批通过后自动生成工单，挂来源共识与验收标准；执行人认领、逐条回写 verdict + evidence，Boss 验收，全程审计留痕。",
-    proof:"fde-demo 会话真机走通五步（C-002 → W-010 → claimed → done → accepted），该房 47 条审计链可回溯。",
+    proof:"fde-demo 会话真机走通五步（C-002 → W-010 → claimed → done → accepted），该会话 47 条审计链可回溯。",
     code:"tasks · claim_task · job_create→claim→complete→accept"
   }
 ];
