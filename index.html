@@ -46,6 +46,8 @@
   }
   .sub{margin-top:14px;max-width:760px;color:var(--sub);font-size:15.5px;line-height:1.85}
   .sub b{color:#cfe3f5;font-weight:600}
+  .gloss{margin-top:16px;max-width:920px;font:600 11.5px/1.95 ui-monospace,Menlo,monospace;letter-spacing:.03em;color:#6f8aa8}
+  .gloss b{color:#a9c6e2}
 
   /* ── 量化条 ── */
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:30px 0 8px}
@@ -234,10 +236,12 @@
     讨论只是它的入口，产出是<b>能逐条回查的结论与工单</b>——不是又一个聊天机器人。
   </p>
 
+  <p class="gloss">术语对齐招聘口径：<b>Agent Orchestration</b> · <b>Multi-Agent Debate</b> · <b>Relevance Guardrail</b> · <b>Structured Output</b> · <b>LLM-as-a-Judge</b> · <b>Validators</b> · <b>Handoff</b> · <b>Observability</b> · <b>Eval / Regression</b></p>
+
   <div class="duo">
     <div class="col">
       <div class="t">坐法 A · 单人主导<span class="st">现在在跑</span></div>
-      <div class="d">入口是<b>智能组建</b>：丢一句想法或一份文档，AI 先审题三步（核心问题 / 视角 / 盲区），再按议题配角色槽位、配维度、配轮数——<b>不是固定 4 个机器人</b>。37 个实跑会话、136 个角色槽位都是这么开的。</div>
+      <div class="d">入口是<b>Agent 编排</b>：丢一句想法或一份文档，AI 先审题三步（核心问题 / 视角 / 盲区），再按议题配角色槽位、配维度、配轮数——<b>不是固定 4 个机器人</b>。37 个实跑会话、136 个角色槽位都是这么开的。</div>
     </div>
     <div class="col b">
       <div class="t">坐法 B · 多人多 Agent 协同<span class="st">待启用</span></div>
@@ -336,7 +340,7 @@
           <div class="row"><div class="k">最开放的题</div><div class="v">rt-game2/3 是“罗小黑·众生之门”——纯创意题。21 / 32 条跑完，出口不是一堆点子，是<b>「30 分钟单机垂直切片、3-5 扇门、不做开放世界」</b>，第 5 轮就收敛。</div></div>
           <div class="row"><div class="k">批判角色原话</div><div class="v">「把番剧里'想见另一侧的自己'当玩家动机，是本次讨论<b>最大的未验证前提</b>——那是观众情感，不是游戏动机，没有证据表明它能迁移进操作循环。」</div></div>
           <div class="row"><div class="k">裁决原话</div><div class="v">「<b>无规格单不拨款</b>；50% 仅作五档预算下限、不参与设卡；效应量以置信区间刷新。」</div></div>
-          <div class="row"><div class="k">为什么收敛</div><div class="v">七段决策卡 + 双层判据要求<b>有数字、有来源、有“若…则”</b>——发散创意根本过不了闸。<b>拼的不是点子多少，是每个数字都能查到出处；头脑风暴它不如你，把风暴压成一条能开工的路线，它比你狠。</b></div></div>
+          <div class="row"><div class="k">为什么收敛</div><div class="v">结构化决策卡 + 校验层要求<b>有数字、有来源、有“若…则”</b>——发散创意根本过不了闸。<b>拼的不是点子多少，是每个数字都能查到出处；头脑风暴它不如你，把风暴压成一条能开工的路线，它比你狠。</b></div></div>
         </div>
       </div>
     </div>
@@ -364,7 +368,7 @@
         <div class="rows">
           <div class="row"><div class="k">第 1 层</div><div class="v"><b>prompt（软）</b>：准则文件 <code>jury-guidelines v1.5</code> 的测算纪律——宣称数字必去水、隐性成本必"若…则"、人工对标必给。这层模型可以不听。</div></div>
           <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
-          <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立验收</b>：独立验收角色按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
+          <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立评审（LLM-as-a-Judge）</b>：评审 Agent 按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
           <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义角色只给事实纪律、不给数字。</div></div>
           <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它敢说结论可复核的原因。</div></div>
         </div>
@@ -404,35 +408,35 @@
 <script>
 const STEPS = [
   {
-    no:"01", name:"提议题", tag:"入口",
+    no:"01", name:"议题输入", tag:"Input",
     desc:"一句话，或一份文档。Boss 抛出问题，奇思原样保留，不偷换。",
     what:"议题进入会话实例，成为整场评审的唯一锚点。支持一句话、也支持带附件/数据。",
     proof:"成都连锁餐饮「12 店 AI 巡检值不值得投」——原始议题直接取自真实业务会。",
     code:"POST /contexts · discussion[0]"
   },
   {
-    no:"02", name:"智能组建", tag:"不是随便拉人",
-    desc:"AI 审题三步：核心问题 / 穷举视角 / 自曝盲区，再指派主裁决。",
+    no:"02", name:"Agent 编排", tag:"Orchestration",
+    desc:"AI 审题三步：核心问题 / 穷举视角 / 自曝盲区，再指派主持 Agent。",
     what:"系统先自己把题审一遍：这个问题真正要回答什么、需要哪几个视角、我可能漏了什么，然后才定角色槽位与轮数。",
     proof:"格陵兰冰盖场，组建阶段真实自曝「我漏掉了冰川动力学专家」——盲区是被写出来的，不是被掩盖的。",
     code:"jury-suggest · buildPromptCtx"
   },
   {
-    no:"03", name:"多角色多轮讨论", tag:"立场冲突",
+    no:"03", name:"多 Agent 讨论", tag:"Debate",
     desc:"每个角色槽位独立人格与立场，互相引用上一轮；能两轮说清就不拖到八轮。",
     what:"每个角色槽位有自己的岗位视角（运营/财务/风险/技术），发言带引用、带轮次。自动挡按表态收敛，不设死轮数。",
     proof:"成都餐饮场 10 轮 42 条真实缠斗；确认型议题 2 轮即收口。",
     code:"runDebate · runSeat（失败重试 3 次 + fallback 模型）"
   },
   {
-    no:"04", name:"跑题探针", tag:"质量信号",
+    no:"04", name:"相关性守卫", tag:"Guardrail",
     desc:"每轮打 0–10 相关度。连续两轮 <6 就拉回，拉回仍低就提前收口。",
     what:"不靠「最多跑几轮」这种硬上限，而是每轮判一次「还在聊正事吗」。偏移就注入提醒拉回（reel），拉不回就停（halt）。",
     proof:"正常场 R3=9、R4=9，零误伤；漂移场连续低分被拉回并记录轨迹。",
     code:"DRIFT_CHECK · drift.scored 落库"
   },
   {
-    no:"05", name:"收敛计票", tag:"可解释的收口",
+    no:"05", name:"共识判定", tag:"Convergence",
     desc:"接受=1 / 部分接受=0.5 / 拒绝=0，加权 ≥0.6 且连续两轮才判定收敛。",
     what:"不是「主持人说差不多了」就结束，是按表态算票。收口时强制列出「未消分歧」，不搞多数暴政。",
     proof:"5 轮收口后仍挂 2–3 条分歧，原样保留——分歧不藏，是给审批人看的。",
@@ -440,14 +444,14 @@ const STEPS = [
     warn:true
   },
   {
-    no:"06", name:"七段决策卡", tag:"可验收的产物",
+    no:"06", name:"结构化输出", tag:"Structured Output",
     desc:"结论 / 假设 / 去水 ROI / 隐性成本 / 人工 vs AI 锚点 / 风险等级 / 建议动作。",
     what:"每段都有硬要求：数字必须带算式、区间、敏感性、来源；厂商宣称要「去水」；隐性成本必须写成「若…则…」。",
     proof:"成都场：供应商宣称降 60% → 去水后 30–40%，算式一行写死。",
     code:"businessPrompt（七段）· 测算纪律 v1.6"
   },
   {
-    no:"07", name:"独立验收角色", tag:"独立挑刺",
+    no:"07", name:"独立评审", tag:"LLM-as-a-Judge",
     desc:"独立 AI 动态选角，判「通过 / 不通过」；不通过 → 漏洞清单 → 打回重审，≤2 轮。",
     what:"讨论结束不等于结论成立。另起一个不参与讨论的 AI，按漏洞跨域自动换角色，专挑致命问题。",
     proof:"食品厂场揪出「576 次/日 ×30 天 ×12 店，把 12 店重复乘了 12 次」——这是真算数错，不是措辞问题。",
@@ -455,7 +459,7 @@ const STEPS = [
     warn:true
   },
   {
-    no:"08", name:"双层判据校验", tag:"代码级红线",
+    no:"08", name:"校验层", tag:"Validators",
     desc:"规则化判据查格式与来源，算式真求值：≈ 容差 5%，= 容差 1%。",
     what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码级判据：七段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
     proof:"4 张决策卡 0 误杀；真错必拦、四舍五入放行。模型算数不可靠，代码兜底。",
@@ -463,7 +467,7 @@ const STEPS = [
     warn:true
   },
   {
-    no:"09", name:"工单闭环", tag:"结论变成任务",
+    no:"09", name:"任务交接", tag:"Handoff",
     desc:"共识 → 工单 → 认领 → 回写 → 验收 → 审计。结论不是文档，是带责任人的任务。",
     what:"审批通过后自动生成工单，挂来源共识与验收标准；执行人认领、逐条回写 verdict + evidence，Boss 验收，全程审计留痕。",
     proof:"fde-demo 会话真机走通五步（C-002 → W-010 → claimed → done → accepted），该会话 47 条审计链可回溯。",
