@@ -7,7 +7,7 @@
 
 ## 一、硬闸：`auditHardGates()`
 
-模型验收角色可能被"说得通"带偏，所以七段决策卡在交给验收角色之前，先过一遍硬断言。
+模型评审 Agent可能被"说得通"带偏，所以结构化决策卡在交给评审 Agent之前，先过一遍硬断言。
 
 ```js
 // 任一不过即强制打回重审，绕过不了
@@ -17,7 +17,7 @@ export function auditHardGates(card) {
   const need = ["【项目结论】", "【核心假设】", "【去水后ROI】", "【隐性成本】",
                 "【人工 vs AI 锚点】", "【风险等级】", "【建议动作】"];
 
-  // ① 七段齐全
+  // ① 字段齐全
   for (const k of need) { if (!t.includes(k)) fails.push("缺段:" + k.replace(/【|】/g, "")); }
 
   // ② 必须算过账
@@ -50,7 +50,7 @@ export function auditHardGates(card) {
 
 ## 二、算数闸：`checkCardArithmetic()`
 
-起因是一次真实事故：决策卡里"8 万 ÷ 12 店"被算错，而且**同一个数被重复乘了两次**。模型自己的算术不可靠，验收角色只能事后抓错，所以把算式直接求值。
+起因是一次真实事故：决策卡里"8 万 ÷ 12 店"被算错，而且**同一个数被重复乘了两次**。模型自己的算术不可靠，评审 Agent只能事后抓错，所以把算式直接求值。
 
 ```js
 // 抓完整算式 "数 × 数 × … (≈|=) 结果" 与 "数 ÷ 数 (≈|=) 结果"
@@ -93,17 +93,17 @@ export function checkCardArithmetic(text) {
 
 ## 三、还有一道：`auditVerdictGate()`
 
-验收角色自己的输出也要校验——必须包含「【验收判定】」段，且值只能是"通过 / 不通过"。缺段或写了"基本通过"这类模糊词，本轮验收直接作废重跑。
+评审 Agent自己的输出也要校验——必须包含「【验收判定】」段，且值只能是"通过 / 不通过"。缺段或写了"基本通过"这类模糊词，本轮验收直接作废重跑。
 
 ```js
 export function auditVerdictGate(audit) {
   const t = String(audit || "");
   const i = t.indexOf("【验收判定】");
-  if (i < 0) return { pass: false, why: "验收角色缺【验收判定】段" };
+  if (i < 0) return { pass: false, why: "评审 Agent缺【验收判定】段" };
   const seg = t.slice(i, i + 40);
   if (!/通过|不通过/.test(seg)) return { pass: false, why: "验收判定值非法" };
   return { pass: true, why: "" };
 }
 ```
 
-**三层闸门的关系**：模型产卡 → 硬闸（结构与证据）→ 算数闸（数字）→ 验收角色（独立视角）→ 验收角色格式闸。每一层都能独立否决，且都不需要模型"配合"。
+**三层闸门的关系**：模型产卡 → 硬闸（结构与证据）→ 算数闸（数字）→ 评审 Agent（独立视角）→ 评审 Agent格式闸。每一层都能独立否决，且都不需要模型"配合"。
