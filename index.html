@@ -367,7 +367,7 @@
         <h3><span class="idx">②</span>证据边界：prompt 定规矩，代码当闸门</h3>
         <div class="rows">
           <div class="row"><div class="k">第 1 层</div><div class="v"><b>prompt（软）</b>：准则文件 <code>jury-guidelines v1.5</code> 的测算纪律——宣称数字必去水、隐性成本必"若…则"、人工对标必给。这层模型可以不听。</div></div>
-          <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
+          <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查结构化输出字段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
           <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立评审（LLM-as-a-Judge）</b>：评审 Agent 按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
           <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义角色只给事实纪律、不给数字。</div></div>
           <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它敢说结论可复核的原因。</div></div>
@@ -448,7 +448,7 @@ const STEPS = [
     desc:"结论 / 假设 / 去水 ROI / 隐性成本 / 人工 vs AI 锚点 / 风险等级 / 建议动作。",
     what:"每段都有硬要求：数字必须带算式、区间、敏感性、来源；厂商宣称要「去水」；隐性成本必须写成「若…则…」。",
     proof:"成都场：供应商宣称降 60% → 去水后 30–40%，算式一行写死。",
-    code:"businessPrompt（七段）· 测算纪律 v1.6"
+    code:"businessPrompt（结构化输出）· 测算纪律 v1.6"
   },
   {
     no:"07", name:"独立评审", tag:"LLM-as-a-Judge",
@@ -461,7 +461,7 @@ const STEPS = [
   {
     no:"08", name:"校验层", tag:"Validators",
     desc:"规则化判据查格式与来源，算式真求值：≈ 容差 5%，= 容差 1%。",
-    what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码级判据：七段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
+    what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码级判据：字段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
     proof:"4 张决策卡 0 误杀；真错必拦、四舍五入放行。模型算数不可靠，代码兜底。",
     code:"auditHardGates · checkCardArithmetic",
     warn:true
