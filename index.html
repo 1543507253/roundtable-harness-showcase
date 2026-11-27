@@ -227,11 +227,11 @@
 <body>
 <div class="wrap">
 
-  <span class="eyebrow"><i></i>ROUNDTABLE AGENT HARNESS</span>
-  <h1>让讨论收敛成<br>能签字的结论</h1>
+  <span class="eyebrow"><i></i>ROUNDTABLE AGENT HARNESS · 多智能体编排运行时</span>
+  <h1>多智能体编排<br>运行时</h1>
   <p class="sub">
-    不是又一个聊天机器人。它把 <b>多角色多轮讨论 → 七段决策卡 → 独立验收 → 工单闭环</b> 串成一条可审计的链路，
-    让一次项目评审从「开几天会」压缩成 <b>几分钟出一页可签字的结论</b>。
+    Roundtable Agent Harness 是一套多模型编排运行时：<b>角色分工 → 九步流程 → 判据验收 → 全链留痕</b>。
+    讨论只是它的入口，产出是<b>能逐条回查的结论与工单</b>——不是又一个聊天机器人。
   </p>
 
   <div class="duo">
@@ -366,7 +366,7 @@
           <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
           <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立验收</b>：独立验收角色按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
           <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义角色只给事实纪律、不给数字。</div></div>
-          <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它能签字的原因。</div></div>
+          <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它敢说结论可复核的原因。</div></div>
         </div>
       </div>
 
@@ -394,8 +394,8 @@
       </p>
     </div>
     <div class="sign">
-      <div class="big">竞品卖「更聪明的讨论」，<br>它卖「能签字的结论」。</div>
-      <div class="small">生成完就结束的 AI 很多；<br>敢打回重做的，很少。</div>
+      <div class="big">结论可以不同意，<br>过程必须查得到。</div>
+      <div class="small">每轮谁说的、用哪个模型、花多少 token、<br>过没过判据，都留在日志里。</div>
     </div>
   </div>
 
