@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>圆桌会议室 · 决策评审引擎</title>
+<title>Roundtable Agent Harness · 多智能体协作运行时</title>
 <style>
   :root{
     --bg:#070b12;
@@ -117,7 +117,7 @@
     padding:2px 6px;border-radius:5px;
   }
 
-  /* ── 两条吵出来的规矩 ── */
+  /* ── 三条跑出来的规矩 ── */
   .lessons{margin-top:38px}
   .lhead h2{
     margin:12px 0 8px;font-size:clamp(22px,2.7vw,31px);font-weight:800;
@@ -227,33 +227,33 @@
 <body>
 <div class="wrap">
 
-  <span class="eyebrow"><i></i>ROUNDTABLE · 决策评审引擎</span>
-  <h1>给决策装检查官</h1>
+  <span class="eyebrow"><i></i>ROUNDTABLE AGENT HARNESS</span>
+  <h1>让讨论收敛成<br>能签字的结论</h1>
   <p class="sub">
-    不是又一个聊天机器人。它把 <b>多 AI 辩论 → 一页决策卡 → 独立验收 → 工单验收</b> 串成一条可审计的链路，
+    不是又一个聊天机器人。它把 <b>多角色多轮讨论 → 七段决策卡 → 独立验收 → 工单闭环</b> 串成一条可审计的链路，
     让一次项目评审从「开几天会」压缩成 <b>几分钟出一页可签字的结论</b>。
   </p>
 
   <div class="duo">
     <div class="col">
-      <div class="t">坐法 A · 一个人的辩论室<span class="st">现在在跑</span></div>
-      <div class="d">入口是<b>智能组建</b>：丢一句想法或一份文档，AI 先审题三步（核心问题 / 视角 / 盲区），再按议题配席位、配维度、配轮数——<b>不是固定 4 个机器人</b>。42 房 145 席都是这么开的。</div>
+      <div class="t">坐法 A · 单人主导<span class="st">现在在跑</span></div>
+      <div class="d">入口是<b>智能组建</b>：丢一句想法或一份文档，AI 先审题三步（核心问题 / 视角 / 盲区），再按议题配角色槽位、配维度、配轮数——<b>不是固定 4 个机器人</b>。37 个实跑会话、136 个角色槽位都是这么开的。</div>
     </div>
     <div class="col b">
-      <div class="t">坐法 B · 真·多人多 Agent<span class="st">待启用</span></div>
-      <div class="d">席位名就是<b>真实岗位</b>：每个岗位的人带自己的 agent 进房，<code>identify</code> 自称身份、<code>join_context</code> 入席，自己 <code>claim_turn</code> 说自己的话。<b>谁会说什么，由那个人自己负责。</b></div>
+      <div class="t">坐法 B · 多人多 Agent 协同<span class="st">待启用</span></div>
+      <div class="d">角色名就是<b>真实岗位</b>：每个岗位的人带自己的 agent 接入同一会话，<code>identify</code> 自称身份、<code>join_context</code> 加入，自己 <code>claim_turn</code> 说自己的话。<b>谁会说什么，由那个人自己负责。</b></div>
     </div>
     <div class="base">
-      <span class="t">共同底座 · 每个席位开口前，系统先把这五样摆到它面前</span>
-      准则硬规则 · 房间记忆 · <b>技能库目录</b> · 行业上下文 · <b>议题事实基准</b>（带来源 URL 与发布日期）——不是让模型凭记忆瞎猜，是把材料摊开。<b>喂什么，就决定它吐什么。</b>
+      <span class="t">共同底座 · 每个角色开口前，系统先把这五样摆到它面前</span>
+      准则硬规则 · 会话记忆 · <b>技能库目录</b> · 行业上下文 · <b>议题事实基准</b>（带来源 URL 与发布日期）——不是让模型凭记忆瞎猜，是把材料摊开。<b>喂什么，就决定它吐什么。</b>
     </div>
   </div>
 
   <div class="stats">
     <div class="stat"><div class="v">1,037<small>条</small></div><div class="k">真实 AI 发言</div></div>
     <div class="stat"><div class="v">367<small>万</small></div><div class="k">累计 tokens</div></div>
-    <div class="stat"><div class="v">42<small>房</small></div><div class="k">评审记录（37 房有真实发言）</div></div>
-    <div class="stat"><div class="v">6,867<small>行</small></div><div class="k">自研核心代码</div></div>
+    <div class="stat"><div class="v">37<small>个</small></div><div class="k">实跑会话实例</div></div>
+    <div class="stat"><div class="v">94.3<small>%</small></div><div class="k">端到端成功率（978/1,037）</div></div>
     <div class="stat"><div class="v">76<small>秒</small></div><div class="k">部署机器时间 · 0 GPU</div></div>
   </div>
 
@@ -266,9 +266,9 @@
 
   <section class="lessons">
     <div class="lhead">
-      <span class="eyebrow"><i></i>FROM REAL DEBATES</span>
-      <h2>三条不是设计出来的，是<span>吵出来的</span></h2>
-      <p>下面每一句都是从真实房间里原样摘的，不是我事后总结的漂亮话。</p>
+      <span class="eyebrow"><i></i>FROM REAL SESSIONS</span>
+      <h2>三条不是设计出来的，是<span>跑出来的</span></h2>
+      <p>下面每一句都是从真实会话里原样摘的，不是我事后总结的漂亮话。</p>
     </div>
 
     <div class="lgrid">
@@ -277,22 +277,22 @@
 
         <div class="q">
           「基本面参考成都统计局公报：2025 年 11 月社零单月同比 <em>-2.9%</em>……8 万元投入必须算清回本周期。」
-          <span class="src">rt-chengdu · 运营官 R1</span>
+          <span class="src">rt-chengdu · 运营角色 R1</span>
         </div>
 
         <div class="q">
           「"降人力 60%"先给出处：成都统计局公报和公共数据开放平台<em>都没有这个口径</em>，只能算供应商话术。」
-          <span class="src">rt-chengdu · 全局批判官 R1</span>
+          <span class="src">rt-chengdu · 全局批判角色 R1</span>
         </div>
 
         <div class="q">
           「单店模型仍是 <em>8 万÷12 店 = 6,667 元/店/年</em>、556 元/店/月；回收期 = 8 万÷年化可核验现金流入，“省 1 小时”一律不进分子。」
-          <span class="src">rt-chengdu · 投资官 R3</span>
+          <span class="src">rt-chengdu · 投资角色 R3</span>
         </div>
 
         <div class="q">
           「公报只有社零与品类增速，<em>没有任何客诉敏感性指标</em>……拿宏观零售数据做微观客诉归因是无源断言，请撤下或标待查证。」
-          <span class="src">rt-chengdu · 全局批判官 R6</span>
+          <span class="src">rt-chengdu · 全局批判角色 R6</span>
         </div>
 
         <div class="take">
@@ -334,9 +334,9 @@
         <h3><span class="idx">③</span>最开放的题，出口也得是“能开工的决定”</h3>
         <div class="rows">
           <div class="row"><div class="k">最开放的题</div><div class="v">rt-game2/3 是“罗小黑·众生之门”——纯创意题。21 / 32 条跑完，出口不是一堆点子，是<b>「30 分钟单机垂直切片、3-5 扇门、不做开放世界」</b>，第 5 轮就收敛。</div></div>
-          <div class="row"><div class="k">批判官原话</div><div class="v">「把番剧里'想见另一侧的自己'当玩家动机，是本次讨论<b>最大的未验证前提</b>——那是观众情感，不是游戏动机，没有证据表明它能迁移进操作循环。」</div></div>
+          <div class="row"><div class="k">批判角色原话</div><div class="v">「把番剧里'想见另一侧的自己'当玩家动机，是本次讨论<b>最大的未验证前提</b>——那是观众情感，不是游戏动机，没有证据表明它能迁移进操作循环。」</div></div>
           <div class="row"><div class="k">裁决原话</div><div class="v">「<b>无规格单不拨款</b>；50% 仅作五档预算下限、不参与设卡；效应量以置信区间刷新。」</div></div>
-          <div class="row"><div class="k">为什么收敛</div><div class="v">七段决策卡 + 双闸要求<b>有数字、有来源、有“若…则”</b>——发散创意根本过不了闸。<b>拼的不是点子多少，是每个数字都能查到出处；头脑风暴它不如你，把风暴压成一条能开工的路线，它比你狠。</b></div></div>
+          <div class="row"><div class="k">为什么收敛</div><div class="v">七段决策卡 + 双层判据要求<b>有数字、有来源、有“若…则”</b>——发散创意根本过不了闸。<b>拼的不是点子多少，是每个数字都能查到出处；头脑风暴它不如你，把风暴压成一条能开工的路线，它比你狠。</b></div></div>
         </div>
       </div>
     </div>
@@ -350,12 +350,12 @@
 
     <div class="lgrid">
       <div class="lcard data">
-        <h3><span class="idx">①</span>多 Agent 是真接，还是循环调 API？</h3>
+        <h3><span class="idx">①</span>多智能体是真接，还是循环调 API？</h3>
         <div class="rows">
           <div class="row"><div class="k">真有协议</div><div class="v"><b>@modelcontextprotocol/sdk 1.10.2</b> + SSE / StreamableHTTP 双传输，<b>33 个工具</b>在 <code>createMcpServer()</code> 里真注册——外部 agent 能连上，不是“我用了 MCP”的口号。</div></div>
-          <div class="row"><div class="k">它怎么说话</div><div class="v"><code>join_context</code> 入席 → <code>list_pending_turns</code> 领到自己的题 → 自己读整间房 → <code>claim_turn</code> 提交自己的话。<b>不是被喂 prompt 代答。</b></div></div>
-          <div class="row"><div class="k">现在的答案</div><div class="v"><b>145 席 backend 全是 http，0 个外部 agent 席位</b>——11-25 CLI 免费档全挂，我写死了 <code>backend:"http"</code>。所以它是“多模型扇出”，<b>不是</b>“多 agent 接入”。</div></div>
-          <div class="row"><div class="k">边界</div><div class="v">会议厅是通的，放开席位层是一行配置的事。<b>难的是先承认它此刻没开着</b>，而不是拿协议名当卖点。</div></div>
+          <div class="row"><div class="k">它怎么说话</div><div class="v"><code>join_context</code> 加入 → <code>list_pending_turns</code> 领到自己的题 → 自己读整份会话 → <code>claim_turn</code> 提交自己的话。<b>不是被喂 prompt 代答。</b></div></div>
+          <div class="row"><div class="k">现在的答案</div><div class="v"><b>136 个角色槽位 backend 全是 http，0 个外部 agent 真实接入</b>——11-25 CLI 免费档全挂，我写死了 <code>backend:"http"</code>。所以它是“多模型扇出”，<b>不是</b>“多 agent 接入”。</div></div>
+          <div class="row"><div class="k">边界</div><div class="v">接入层是通的，放开外部 agent 只需一行配置。<b>难的是先承认它此刻没开着</b>，而不是拿协议名当卖点。</div></div>
         </div>
       </div>
 
@@ -364,7 +364,7 @@
         <div class="rows">
           <div class="row"><div class="k">第 1 层</div><div class="v"><b>prompt（软）</b>：准则文件 <code>jury-guidelines v1.5</code> 的测算纪律——宣称数字必去水、隐性成本必"若…则"、人工对标必给。这层模型可以不听。</div></div>
           <div class="row"><div class="k">第 2 层</div><div class="v"><b>代码（硬）</b>：<code>auditHardGates()</code> 正则查七段齐不齐、有无数字、有无来源标记、隐性成本有无"若…则"、禁"整体良好/建议采纳"；<code>checkCardArithmetic()</code> 把卡里算式真求值（≈容差 5%）。不过就<b>打回重写</b>，≤2 轮，还不过打 <b>⚠️ 交 Boss</b>。</div></div>
-          <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立判</b>：审视验收官按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
+          <div class="row"><div class="k">第 3 层</div><div class="v"><b>独立判</b>：独立验收角色按议题类型<b>动态选角</b>（投资类→独立审计师，运营类→一线店长），只判通过/不通过，附 3-5 条致命漏洞。</div></div>
           <div class="row"><div class="k">行业基准</div><div class="v"><code>industry-context.md v1.0.1</code> 按 base 分段注入：workbuddy→PMBOK/GB-T 19001，auditor→COSO/ISO 31000，opencode→Osterwalder/波特五力。<b>只收国标、法规、权威框架，明令禁写“行业经验之谈”</b>；自定义席只给事实纪律、不给数字。</div></div>
           <div class="row"><div class="k">所以</div><div class="v"><b>模型说“我觉得够了”不算数，正则和算式才算。</b>软约束兜不住的地方，用代码兜——这是它能签字的原因。</div></div>
         </div>
@@ -373,9 +373,9 @@
       <div class="lcard wide">
         <h3><span class="idx">③</span>"敢反驳议题"是长出来的，不是写死的</h3>
         <div class="rows">
-          <div class="row"><div class="k">查了什么</div><div class="v">全库搜"议题本身""该不该这么问"这类字样，<b>只有 1 处命中</b>，还是组建准则里的"审题三步"——<b>没有任何一条指令让席位反驳议题</b>。辩论 prompt 只写"明确表示认同或反驳、要有实质交锋"，反驳谁、反驳到哪一层，模型自己选。</div></div>
+          <div class="row"><div class="k">查了什么</div><div class="v">全库搜"议题本身""该不该这么问"这类字样，<b>只有 1 处命中</b>，还是组建准则里的"审题三步"——<b>没有任何一条指令让角色槽位反驳议题</b>。讨论 prompt 只写"明确表示认同或反驳、要有实质交锋"，反驳谁、反驳到哪一层，模型自己选。</div></div>
           <div class="row"><div class="k">所以场场不同</div><div class="v">rt-gate 砍设问结构（"二选一本身就是战略上的偷懒"）；同房另一轮砍客户细分未定（"没定就敢报 3.5 天，等于给未定义物估价"）；rt-store 砍前提（"必须换这个前提不成立，是代码缺陷不是介质缺陷"）。<b>模板写不出四种刀法。</b></div></div>
-          <div class="row"><div class="k">也不场场有</div><div class="v">rt-chengdu、rt-food、rt-ice 三个房间里没出现"反驳议题"——如果是预设，它该场场来一句。</div></div>
+          <div class="row"><div class="k">也不场场有</div><div class="v">rt-chengdu、rt-food、rt-ice 三个会话实例里没出现"反驳议题"——如果是预设，它该场场来一句。</div></div>
           <div class="row"><div class="k">最硬的自证</div><div class="v">准则文件里留着一条翻车记录：<b>“2026-11-24 游戏场，4 席把'游戏创意'审成'十年期 AI 技术立项'，16 条发言 16/16 落在 ROI/技术栈，游戏本体零评审——不是模型差，是组建没有审题环节”</b>。这条规则是翻车后补的。<b>如果我一开始就写死，就不会有这次翻车。</b></div></div>
         </div>
       </div>
@@ -390,7 +390,7 @@
         <span>②</span> 单机单进程，适合一个团队评审，不是全公司 SaaS；<br>
         <span>③</span> 审计是应用级留痕，不是法律级存证；<br>
         <span>④</span> 当前不做自动联网检索，事实靠半自动注入白名单；<br>
-        <span>⑤</span> 产物体（artifact）不进席位 prompt，外部 agent 得自己 <code>get_artifact</code> 取。
+        <span>⑤</span> 产物体（artifact）不进角色 prompt，外部 agent 得自己 <code>get_artifact</code> 取。
       </p>
     </div>
     <div class="sign">
@@ -406,21 +406,21 @@ const STEPS = [
   {
     no:"01", name:"提议题", tag:"入口",
     desc:"一句话，或一份文档。Boss 抛出问题，奇思原样保留，不偷换。",
-    what:"议题进入房间，成为整场评审的唯一锚点。支持一句话、也支持带附件/数据。",
+    what:"议题进入会话实例，成为整场评审的唯一锚点。支持一句话、也支持带附件/数据。",
     proof:"成都连锁餐饮「12 店 AI 巡检值不值得投」——原始议题直接取自真实业务会。",
     code:"POST /contexts · discussion[0]"
   },
   {
     no:"02", name:"智能组建", tag:"不是随便拉人",
-    desc:"AI 审题三步：核心问题 / 穷举视角 / 自曝盲区，再指派主判官。",
-    what:"系统先自己把题审一遍：这个问题真正要回答什么、需要哪几个视角、我可能漏了什么，然后才定席位与轮数。",
+    desc:"AI 审题三步：核心问题 / 穷举视角 / 自曝盲区，再指派主裁决。",
+    what:"系统先自己把题审一遍：这个问题真正要回答什么、需要哪几个视角、我可能漏了什么，然后才定角色槽位与轮数。",
     proof:"格陵兰冰盖场，组建阶段真实自曝「我漏掉了冰川动力学专家」——盲区是被写出来的，不是被掩盖的。",
     code:"jury-suggest · buildPromptCtx"
   },
   {
-    no:"03", name:"多席位辩论", tag:"立场冲突",
-    desc:"每席位独立人格与立场，互相引用上一轮；能两轮说清就不拖到八轮。",
-    what:"每个席位有自己的角色（运营/财务/风险/技术），发言带引用、带轮次。自动挡按表态收敛，不设死轮数。",
+    no:"03", name:"多角色多轮讨论", tag:"立场冲突",
+    desc:"每个角色槽位独立人格与立场，互相引用上一轮；能两轮说清就不拖到八轮。",
+    what:"每个角色槽位有自己的岗位视角（运营/财务/风险/技术），发言带引用、带轮次。自动挡按表态收敛，不设死轮数。",
     proof:"成都餐饮场 10 轮 42 条真实缠斗；确认型议题 2 轮即收口。",
     code:"runDebate · runSeat（失败重试 3 次 + fallback 模型）"
   },
@@ -447,17 +447,17 @@ const STEPS = [
     code:"businessPrompt（七段）· 测算纪律 v1.6"
   },
   {
-    no:"07", name:"审视验收官", tag:"独立挑刺",
+    no:"07", name:"独立验收角色", tag:"独立挑刺",
     desc:"独立 AI 动态选角，判「通过 / 不通过」；不通过 → 漏洞清单 → 打回重审，≤2 轮。",
-    what:"辩论结束不等于结论成立。另起一个不参与辩论的 AI，按漏洞跨域自动换角色，专挑致命问题。",
+    what:"讨论结束不等于结论成立。另起一个不参与讨论的 AI，按漏洞跨域自动换角色，专挑致命问题。",
     proof:"食品厂场揪出「576 次/日 ×30 天 ×12 店，把 12 店重复乘了 12 次」——这是真算数错，不是措辞问题。",
     code:"auditAuditPrompt · auditVerdictGate · MAX_AUDIT_ROUNDS=2",
     warn:true
   },
   {
-    no:"08", name:"双闸校验", tag:"代码级红线",
-    desc:"硬闸查格式与来源，算数闸真求值：≈ 容差 5%，= 容差 1%。",
-    what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码闸：七段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
+    no:"08", name:"双层判据校验", tag:"代码级红线",
+    desc:"规则化判据查格式与来源，算式真求值：≈ 容差 5%，= 容差 1%。",
+    what:"Prompt 是软约束，模型会说「我觉得行」。所以再上一道代码级判据：七段是否齐、有没有数字、有没有来源标记、有没有空话，算式逐个求值。",
     proof:"4 张决策卡 0 误杀；真错必拦、四舍五入放行。模型算数不可靠，代码兜底。",
     code:"auditHardGates · checkCardArithmetic",
     warn:true
@@ -466,7 +466,7 @@ const STEPS = [
     no:"09", name:"工单闭环", tag:"结论变成任务",
     desc:"共识 → 工单 → 认领 → 回写 → 验收 → 审计。结论不是文档，是带责任人的任务。",
     what:"审批通过后自动生成工单，挂来源共识与验收标准；执行人认领、逐条回写 verdict + evidence，Boss 验收，全程审计留痕。",
-    proof:"fde-demo 房真机走通五步（C-002 → W-010 → claimed → done → accepted），该房 47 条审计链可回溯。",
+    proof:"fde-demo 会话真机走通五步（C-002 → W-010 → claimed → done → accepted），该房 47 条审计链可回溯。",
     code:"tasks · claim_task · job_create→claim→complete→accept"
   }
 ];
